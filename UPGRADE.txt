@@ -1,0 +1,20 @@
+Upgrade Server SETUP:
+=====================
+
+1. Be an OP in CHANNEL_CHAT, with nick UpgradeMM
+2. Have a Folder called "Upgrade", from where Client is started up.
+3. In the "Upgrade" folder, the following ports of the Client should exist:
+    - MasalaMate.WIN_X86_32
+    - MasalaMate.WIN_X86_64
+    - MasalaMate.LINUX_X86_32
+    - MasalaMate.LINUX_X86_64
+    - MasalaMate.APPLE_PPC_32
+    - MasalaMate.APPLE_PPC_64
+    - MasalaMate.APPLE_X86_32
+    - MasalaMate.APPLE_X86_64
+    - MasalaMate.LINUX_PPC_32
+    - MasalaMate.LINUX_PPC_64
+
+4. Click File->Upgrade Server.
+5. Now any client, which gets kicked in main or if USER ticks on
+     Tools->Check and Upgrade, will try to Upgrade.

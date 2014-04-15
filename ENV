@@ -1,0 +1,30 @@
+# ENV file which dictates build.
+
+# Below to test with actual server.
+# unset for local server
+export SERVER=IRCSUPER
+
+# Below for Windows build.
+# Build using MINGW
+# For MINGW, install MSYS, MSYS SDK, MINGW runtime, binutils, gcc, g++, gdb
+#   w32api. Note that you need to untar the tar.gz in the mingw directory.
+#  Build libFOX in MINGW too.
+# Build flags for FOX =>
+#  ./configure --with-opengl=no --enable-release
+
+# export BUILD=APPLE for building on APPLE (just changes nm)
+export BUILD=WINDOWS
+
+# UNIX build.
+# Build flags for FOX =>
+#  ./configure --with-opengl=no --with-xcursor=no --disable-jpeg --disable-tiff
+#  --disable-png --enable-release
+
+# For Production build = -O, strip, pack with upx.
+# For Linux Production build, the linux upx should exist in the PATH.
+export PRODUCTION=YES
+#export PRODUCTION=NO
+
+# Set the Build mode. For 32 bit, it should remain blank.
+# export BUILD_MODE=64
+export BUILD_MODE=

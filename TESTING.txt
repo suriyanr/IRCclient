@@ -1,0 +1,99 @@
+Basic Test Plan:
+----------------
+
+
+A) SENDS:
+   ------
+    -------------------------------------------
+    Sends: (client's DCCServer)
+    Setup: MM is Sender and is firewalled. 
+           MM/Sysreset receiver non firewalled.
+    -------------------------------------------
+    1. PASS
+      a) Manual Send to a NON FW Sysreset client.
+      b) Cancel Send at Receiver.
+      b) ReSend as in a), to check Resume.
+
+    2. PASS
+      a) Manual Send to a NON FW MM client. (fails if weird name used in ME, OK)
+      b) Cancel Send at Receiver.
+      c) ReSend as in a), to check Resume.
+
+    
+    3. NOT TESTED.
+       Serving Folder File, Queued Send to a NON FW Sysreset client.
+
+    4. PASS
+      a) Serving Folder File, File Server send to a NON FW Sysreset client.
+      b) Cancel Send at Receiver.
+      c) ReSend as in a), to check Resume.
+
+    5. PASS
+      a) Serving Folder File, File Server send to a NON FW MM client.
+      b) Cancel Send at Receiver.
+      c) ReSend as in a), to check Resume.
+
+    6. NOT TESTED.
+       Serving Folder File, Queued Send to a NON FW MM client.
+
+    7. PASS
+      a) Partial Folder File, File Server send to a NON FW MM client
+      b) Cancel Send at Receiver.
+      c) ReSend as in a), to check Resume.
+
+    8. NOT TESTED.
+       Partial Folder File, Queued Send to a NON FW MM client.
+
+    --------------------------------------------------------------
+    Sends: (DCC Send)
+    Setup: MM is Sender and is not firewalled.
+           MM/SysReset is receiver. For SysReset, dccserver is off.
+                                    For MM, firewall is ON.
+    --------------------------------------------------------------
+    1. PASS
+      a) Manual Send to a DCCServer off, Sysreset client.
+      b) Cancel Send at Receiver.
+      b) ReSend as in a), to check Resume. 
+           FAILS on file with many spaces, and japanese characters. 
+           Might be SysReset Bug.
+
+    2. PASS
+      a) Manual Send to a FW MM client.
+      b) Cancel Send at Receiver.
+      c) ReSend as in a), to check Resume.
+
+    3. NOT TESTED.
+       Serving Folder File, Queued Send to a FW Sysreset client.
+
+    4. PASS
+      a) Serving Folder File, File Server send to a DCCServer off Sysreset clnt.
+      b) Cancel Send at Receiver.
+      c) ReSend as in a), to check Resume.
+           FAILS on file with many spaces, and japanese characters.
+           Might be SysReset Bug.
+
+    5. PASS
+      a) Serving Folder File, File Server send to a FW MM client.
+      b) Cancel Send at Receiver.
+      c) ReSend as in a), to check Resume.
+
+    6. NOT TESTED.
+       Serving Folder File, Queued Send to a FW MM client.
+
+    7. PASS
+      a) Partial Folder File, File Server send to a FW MM client
+      b) Cancel Send at Receiver.
+      c) ReSend as in a), to check Resume.
+
+    8. NOT TESTED.
+       Partial Folder File, Queued Send to a FW MM client.
+
+    --------------------------------------------------------------
+    Sends: (Impossible Send situation)
+    Setup: MM is Sender and is firewalled.
+           MM is Receiver and is firewalled.
+    --------------------------------------------------------------
+    1. PASS
+       a) Manual Send from FW MM to FW MM client.
+          - No file should get created in Partial of Receiver.
+

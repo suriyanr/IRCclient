@@ -1,0 +1,81 @@
+We have formed a swarm. Now what ?
+----------------------------------
+   So now we have a bunch of connections, we need to dance with to exchange
+   swarm related information and to actually get some file bits moving.
+
+   Need to think on this.
+   Say we have C connections. Out of this, say D has filesize more than
+   what we have. Say U have filesize less than what we have, and E have
+   same filesize as us. This information will ofcourse dynamically change, 
+   as each is uploading and downloading.
+   D + U + E = C
+
+   How to propagate changes in our filesize. Should we propagate to all the
+   swarm ? We are trying to increase our filesize as fast as we can, and
+   hence are constantly in touch with D of them. I think its enough to
+   update our filesize to E in the swarm who have same file size as us.
+   The reasoning being, D are anyway ahead of us, they cant use it.
+   U are anyway using us. E are the ones not using us, and hence that
+   information can be handed, for them to start using us.
+
+   So a FileSize update message will look like:
+   FS "FileName" FileSize\n
+
+   Keepalive message:
+   KA\n
+
+   Swarm Client List request.
+   CL "FileName"\n
+   Swarm Client List response.
+   CL <ip1 in hex><ip2 in hex> ... \n (max SWARM_MAX_CLIENTS entries)
+   Note, if SWARM_MAX_CLIENTS = 50, line length is about: 200 bytes.
+
+   Data Piece request: will receive only 8K or less for possibly last piece
+     of sender Node. (which can be less than actual file size)
+   DP FileOffset FileName\n
+   Data Piece response:
+   DP OK\n
+   Data of 8K.
+   or
+   DP NO\n
+   We can recieve a NO for whatever reason.
+
+   Stop Requesting Data Pieces: FR for Freeze
+   FR "FileName"\n
+
+   You may start requesting Data Pieces: UF for Un Freeze
+   UF "FileName"\n
+
+   So most of the time we are in readLine, and act on what the line is.
+   Which looks good so far.
+   We do a readLine with SWARM_CONNECTION_TIMEOUT. If we reach the timeout
+   we disconnect that client.
+
+   Do we have 50 different threads ? Have to spend some thought on it.
+   For initial simplicity we opt for the Thread model.
+   
+   So, how do we efficiently ask for Data Pieces from the D clients ?
+   One more thing to keep in mind is to make sure that the actual file
+   contains a continuum of bytes, and doesnt have any holes. As and
+   when we get a piece which can be appended to the file, that is when
+   we update it. This helps us in making sure that we dont have to
+   check the file for partial holes and we dont have to maintain a
+   seperate map file for the downloading file. This helps us in
+   resuming the same file with different protocols.
+
+   So, how do we internally coordinate downloading pieces from various
+   clients, and update the file accordingly ?
+
+   Say there are N threads. So they can work with a max of N chunks at the
+   same time. We have currentFileSize. So we have an array of N holding
+   structures.
+   Slot[0...N-1] holding structures.
+   Structure elements:
+   {
+      Nick
+      IP
+      StateIndicator
+      CurrentChunkFileSizeOffsetRequested
+      FileSizeAtNicks
+      LastUpdateTime
+   }

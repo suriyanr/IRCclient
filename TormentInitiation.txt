@@ -1,0 +1,38 @@
+a. Say I want to torrent download file stream.avi. I get a list of MM clients
+   in FilesDB which have the file. So I get a list of 
+   Nick/IPs/stream.avi/FileSize which identifies the MM clients.
+
+b. Now for each entry, do the below:
+   b1. Get entry, if IP of Nick is unknown, issue userhost, swap current entry
+       with last entry.
+   b2. Get entry, if IP of Nick is unknown sleep 10 seconds, go to b1.
+   b3. Connect to IP:8124.
+   b4. If connection cannot be established, issue: DCC ARTDVDHIKE stream.avi filesize <md5 of 8K bytes before filesize>. Go to b1.
+   b5. We established the connection. Ask if he is willing to join the Swarm
+       for file stream.avi, mycurrentfilesize, <md5 of 8K before that filesize>
+       If he is willing we have obtained one connection.
+   b6. Go to b1.
+
+   Now the DCCServer is listening on 8124 gets a swarm connection, possibly 
+   cause we had issued a DCC ARTDVDHIKE to it. In that case it will handshake
+   with stream.avi, filesize, and md5 of its last 8K.
+   If we have less of stream.avi than filesize, then we will send:
+   stream.avi, our filesize, and our sha1 of 8K before filesize. And he can
+   accept us or reject us.
+   DCCServer/DCC Swarm handshake protocol.
+   Client connect to server and sends:
+   140 ClientNick
+   When server receives this, it sends the Connection off to the HandShake
+   protocol handler.
+   Client sends HS
+   Server validates or sends HS which client validates.
+   End of HS => HS OK
+   Next is CL list, which the server will send once HS is succesful, as
+   CL ... (will contain list of Nick, IP)
+
+   We will also stop trying to get more people in once we have reached
+   some SWARM_MAX_CLIENTS = max # of people allowed in swarm.
+
+   The person who trys to connect out, is the one who would send the first HS.
+   if to DCCServer, then we write 140 ..., if waiting for a connect the
+   other person would not have a 140 ..., but a straight HS.

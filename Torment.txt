@@ -1,0 +1,119 @@
+What it does?
+-------------
+
+1. Gets file content sequential.
+2. Downloads from more than 1 server.
+3. No need to maintain state. => at start, its verified if a person can
+   join this torment, by checking the "Can Resume". If not, user will have
+   to do rollback till its OK to resume. - Have to Think.
+
+What a client already knows to start the torment ?
+--------------------------------------------------
+
+1. A MM server starts a torment. MM's will exchange torment information
+   as part of FFLC.
+
+2. For time pass, we make it respond to a @swarm <string> query in
+   channel.
+
+3. A MM server has more than 1 send for same file, or more than 1 queue for
+   the same file. It kicks in a torrent for the file.
+
+Thoughts on how a Server decides to go Torment:
+-----------------------------------------------
+Consider the file torment.avi
+Say we have 1 send for that file, and 1 queue for that file, then server
+decides to go the TORMENT way.
+So this switches the server in TORMENT mode for the file torment.avi
+For switching we need to re establish the connection. As the nicks could
+access our fileserver => we can reinitiate a connect to those nicks. But,
+there is no guarantee that the other two can connect to each other.
+We can get a rough idea using MMFW and MMNF, if those nicks can connect.
+So, we use that information as well, in deciding if we can initiate a torment.
+If we find that we cant form a grid, then there is no point.
+
+Now, how do new clients join the torrent. Now the file being downloaded will
+be in each guy's partial/serving folder => it can be issued a GET from any
+other client. If the issuing get is an MM client, then it should be joined
+into the swarm. So joining the swarm for that torment, should be possible
+no matter whom we contact.
+
+So now, how do we form the torment net for that file ? We could have a binary
+tree. The ones closest to the root have more of the file than the ones farther
+away. So a new guy entering the torment, should be first attached to the
+root, and then pushed downward till it fits into the right slot. Also
+dynamically, children will be moved up, if they start having more of the file
+than their parent. To achieve this, we need to have a link from the parent's
+parent to the node as well. I visualise a ball.
+
+
+         _P0_                  P0-+
+        |    |                 |  |
+      _P1_   P2              +-P1 |
+     |    |                  | |  |
+  C1P1    C2P2               | P2-+
+                             | |  |
+        Fig 1                +-P3 |
+                             | |  |
+                             | P4-+
+                             | |
+                             +-P5
+
+                               Fig 2
+
+Consider Fig 2. Each node will have max 2 connections sending data out, and
+max 2 connections getting data in. (data as in file data, though the
+connections are bidirectional, and we use them to send status and other
+informational messages)
+
+P0 is parent of P1. P1 is parent of P2. P2 is parent of P3. P3 is parent of P4
+=> P0 > P1 > P2 > P3 > P4, in terms of who has more of the file.
+Now consider P2. He is connected to P0, P1 and P3, and hence can transfer
+to either or all of them. In normal circumstances, P2 should be receiving
+from P1 and P0, and sending to P3 and P4. Now the balance will be 
+overthrown, in the case that P3, starts to have more of the file => (he gets 
+it faster from P1, than P2 can get from P0 and P1) To balance this imbalance, 
+we need to swap P2 and P3.
+Connections of P2 are: P2 <-> P1, P2 <-> P3, P2 <-> P0, P2 <-> P4
+Connections of P3 are: P3 <-> P2, P3 <-> P4, P3 <-> P1, P3 <-> P5
+So we see that they already have 3 existing connections between P1,
+themselves and P4 exist. Only the extreme connections (P2's grand father,
+P3's grand child) need to be established anew.
+
+Also assume that each node has the full map of the network as established.
+This is so that, contacting any node in the torment, a new fellow should be
+able to fit in in the right spot. So at node level we know the approximate
+file each node level has, and hence can fit in the new guy at the
+right place.
+
+So now that we have the torment connections in place, we have to set down
+the payloads that will be exchanged to make it run.
+---------------------------------------------------------------
+
+Below is considering all connected, and not connections as described above.
+
+So assuming connections are in place, and Nodes know each others rough
+FileSizes, who requests from whom ?
+A guy with lowest filesize can request from all the node. So, say if we have
+nodes arranged in ascending order of FileSizes.
+FS00, FS01, FS02
+FS10, FS11
+FS20, FS21, FS22
+FS30, FS31, FS32
+FS40, FS41
+
+Note that the FileSizes that a Node has are from the past. Hence each row
+can exchange data pieces within its row or to rows ahead of it.
+We can see that if we didnt have any optimize algo in place then we can see
+that the row with max file sizes will be flooded by requests from all.
+So to start with lets say, with have a constant called: 
+#define  SWARM_PENDING_DR  5
+Or, say we are allowed to send DR requests to all nodes in our row, and the
+next row => roughly to all nodes who have > filesize than us but roughly
+the same size, say within two DR piece sizes. (16K)
+This will enable a rough swarm movement. And also if there are no nodes in
+the same row, then we allow a limit of 5 ? other nodes max. (think on this)
+So as part of FS exchanges, apart from getting the FS which it completely has
+we can also get the pieces further on with holes in them, so that node
+can determine which one to positively get from its same row brethren.
+

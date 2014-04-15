@@ -1,0 +1,230 @@
+Jan 22nd Beta release and changes.
+==================================
+Changes since the Jan 8th version are as follows:
+1. Add manual /dcc send
+2. Added more statistics like record download speed, record upload speed, 
+   total bytes sent, total bytes received. These can be seen in the file 
+   server advertisement.
+3. Added upnp support. People behind upnp capable routers, should benefit.
+4. Add menu entry to open the directory holding the partial/serving files.
+5. Added Help.
+6. User changeable fonts.
+7. Added buttons for allmost all commands.
+8. Expedited it in getting file list of others quicker (!list)
+9. Doing a !list <nick> automatically accesses the trigger of nick, and 
+   gets information on the files that nick is serving.
+10. Added support to Windows 98.
+
+
+Feb 1st Beta release and changes:
+=================================
+Changes since the Jan 22nd version are as follows:
+1. Firewall Status button added. Red => firewalled.
+2. Clicking on a nick in the text window, highlights the nick in the nick list.
+3. File Server Ad, adds a Firewall Status message.
+4. File->Quit asks for confirmation before quitting.
+5. Allow user to change the Partial and Serving folders.
+6. Lots fo little UI beautification stuff.
+
+
+Feb 17th Beta release and changes:
+==================================
+Changes in Feb 17th Release since the Feb 1st release:
+a) Improved the FileSearch Tab - Now Sends and Queues information is added.
+b) Improved the FileSearch Tab - Buttons added to "List All", "List Nick" etc. 
+   Also buttons added to limit search to open sends, and/or open queues
+c) Added a right click popup menu, which works on the currently highlighted 
+   nick. (Portcheck, portcheckme, dcc send, update files, list files)
+d) Moved to FOX UI toolkit version 1.4.6
+e) Double clicking on a queued item in the "File Server" tab, one can force 
+   send the file.
+f) Removed the !list on channel entry, as it was generating too much traffic.
+
+Note: There is still an intermittent crash when focus is on the "File Server" 
+      or "Downloads" Tab. Hence switch focus to some other TAB to avoid crashes.
+
+
+Apr 5th Beta release and changes:
+=================================
+Changes in Apr 5th Release since the Feb 17th release:
+a) DCC Send remembers dir which was used to last send a file. Hence opens
+   up the same directory, the next time.
+b) Serves all sub directories within Serving Folder too.
+c) Traverse sub directories while accessing another's server and get file
+   listing within sub directories. 
+d) Added a "PWD" command to a MasalaMate server. (Print working directory).
+e) GUI Dir->Update Server added. This will update the files MasalaMate is
+   serving, if user populates or removes files from the Serving Folder and
+   its sub directories.
+f) Completed downloads and Partial Downloads remain in the "Downloads" TAB.
+   Can be individually removed or cleared.
+g) Implemented a "Fast File List Collection algorithm". Lets call it FFLC.
+   This is in alpha stage. With this algorithm, we are able to get the
+   approximate files served in the channel within a few minutes, without
+   generating too much traffic.
+h) Implemented "Advertisement synchronisation". Lets call it AS. This helps
+   in relieving the load on the servers so that MasalaMate clients do not
+   dump their Ad at arbitrary times. With this algorithm in place, the
+   advertisements will come in spaced every 3 minutes and in order.
+
+Apr 14th Beta release and changes:
+==================================
+a) Bug Fix: C++ runtime error fixed which occured in previous version.
+b) Bug Fix: On being disconnected from IRC server, it didnt reconnect.
+b) Added some more Opimisation to FFLC - moved to version 2.
+c) Added statistics printing for FFLC traffic and normal file server.
+d) Added a "Non Firewalled" filter in the "File Search" tab.
+e) Added PING/VERSION/DCCALLOW+/DCCALLOW-/WHOIS in the right click menu.
+
+May 10th Beta release and changes:
+=================================
+a) Bug Fix: C++ runtime error which rarely happened (once a day) with 
+   previous version.
+b) Bug Fix: Resume not working if Downloads TAB has it as "PARTIAL"
+b) UI: Show user mode prefixed with nick, in chat text.
+c) UI: Implemented more CTCPs -> time, clientinfo
+d) UI: Added Directory Name in "File Search" TAB.
+e) UI: Added a Scroll Button, to control scrolling.
+f) UI: File Search, Downloads, Waiting, File Server TABS  have a Right click 
+       popup, which has self explanatoy options.
+g) UI: Font changes are preserved over sessions.
+h) UI: On a new entry populated in the Waiting or Downloads TAB, change the
+       color of Label to Red, so user is alerted.
+i) UI: Files in the File Search TAB, can be sorted by clicking on the
+       label header.
+j) UI: Sorting a huge list of files takes time - Added a Progress Bar
+       in green showing Percentage.
+k) UI: In the Downloads TAB, PARTIAL entries can be right clicked on, 
+       and Rerequested.
+l) UI: In the Waiting TAB, entries can be right clicked on, and Queue
+       information updated.
+m) UI: Added a Search Text in the Menu Bar. It can be used to search in all
+       the tabs.
+n) All Files in Waiting or PARTIAL or Downloading are saved when exiting.
+   Hence you dont have to remember what downloads are unfinished.
+o) UI: Files in PARTIAL state or in the "Waiting" TAB can be right click
+   and download initiated.
+p) UI: Nick/Password change put in menu bar.
+q) UI: Connection Type changes put in menu bar.
+r) UI: Added Tools -> Rollback Truncate File. Useful if you have a power 
+   outage and the downloading file gets corrupted towards the end.
+s) UI: Added Check File Integrity. You can check if the file you are trying
+   to download will resume from that nick and not cause a Resume Rollback
+   Error. This should be used with "Rollback Truncate File" to solve
+   Resume Rollback Errors.
+
+
+May 26th Beta release and changes:
+=================================
+a) Linux: Sends to firewalled clients was not working - fixed.
+b) Auto Upgrade feature: Upgrade to latest version with ease. Its under
+   Tools -> Check and Upgrade.
+c) Tools -> Request UNBAN (if you get banned in MAIN channel)
+d) BUG: May 10th had a serious bug in initiating a download - fixed.
+e) QUIT Messages are now visible.
+f) File Search - if an item is selected, it remains highlighted and in focus
+   after sorting.
+g) FFLC: moved to version 3.
+h) File Search UI: Added new items-> List Partial and Ignore Partials.
+i) UI: Downloads/Uploads now specify the average rate at which they got
+   done.
+j) Downloads Cancel: No more 10 second sleep freezing the UI.
+k) Added Right Click -> Search In Files. This will search for the text
+   clicked in channels in the File Search TAB.
+l) Identified Nicks will be attempted to be recovered on a Join - untested.
+m) Added a Propagation Algorithm. This is in Alpha stage. This prevents
+   all MM clients to jump on a new server putting out an Ad in channel.
+n) BUG: Internal bug in deciding if a node is firewalled or not - fixed.
+o) CRASH: One unknown crash present - SIGABRT.
+
+
+Aug 23rd 2005 Beta release and changes:
+=======================================
+a) Linux BUG: thread leak fixed. Symptom: stops responding to new DCCs after
+   a while.
+b) Improved stack trace. MINGW gcc compiler doesnt have support for stack
+   unwinding in a signal - so not much use there. Possibly it will get fixed
+   in next MINGW gcc release. Stack trace now is in ServingDir/Crash
+c) BUG: Was responding to @find in chat channel - shouldnt.
+d) Record CPS had over rated values. Now its measured when a send completes,
+   and not saved across restarts.
+e) FEATURE: CAP for per download/overall downloads/per upload/overall uploads.
+f) BUG: in queueing not following priority correctly - fixed.
+g) BUG: requeueing a file on failure if it existed in a Sub directory - fixed.
+h) FEATURE: Can add multiple Serving Directories across drives etc.
+i) FEATURE: Can now paste multiple lines.
+j) FEATURE: Response of sends and queues commands is now exactly like
+   the deatiled sends/queues of sysreset.
+k) FEATURE: Added a minoverallcps, which is used to add a send slot if the
+   FileServer's overall upload consistently remains below minoverallcps.
+l) FEATURE: Added an option to queue a file to a nick. Its always added to
+   the end of the queue. If one wants more control use the command:
+   /dcc queue nick q_number
+m) FEATURE: Major improvement in the Waiting TAB to show the sends and queues
+   of the Server we are waiting on. This is a static snapshot when we last
+   attempted to get the file. This can be updated by issuing => Update Q
+   information. This information cannot be got for Iroffer servers.
+n) FEATURE: Registered nicks are reclaimed.
+o) FEATURE: File Server Sends/Queues Flexy plan.
+    - Can change overall number of Queues. /fserv queues overall <num>
+    - Can change number of queues allowed per user. /fserv queues user <num>
+    - Can change overall number of Sends. /fserv sends overall <num>
+    - Can change number of sends allowed per user. /fserv sends user <num>
+    - To print current stats -> /fserv print
+p) FEATURE: File Server having Small Queues and Big Queues.
+    - Small files will send sooner.
+q) FEATURE: CAP your download/upload - each transfer to overall cap.
+   This shouldnt be really needed. But if you want to use, its there.
+
+Sep 14th 2005 Beta release and changes:
+=======================================
+a) BUG: 99% CPU utilization.
+b) BUG: FFLC3 between Linux and Windows was erroneous.
+c) FEATURE: Do not crash, if we can get by.
+d) FEATURE: /join other channels. /part to part. Example: /join #gamez
+e) FEATURE: /list command. Example: /list >300
+f) FEATURE: PgUP/PgDOWN cycles through channel tabs.
+g) BUG: Files being served form Partial Dir were lost when client restarted.
+h) FEATURE: Will not Send or Receive exe files, ever. Not even if dccallow
+            is done. Rename it and send.
+i) FEATURE: DCC Chat. Allows one DCC Chat at a time. quit to terminate.
+
+Nov 17th 2005 Beta release and changes:
+=======================================
+a) BUG: Lost other MM client information when kicked from #IndianMasala
+        and hence lost Ad sync, as a side effect.
+b) FEATURE: Allow Manual DCC Send, even if receiving nick is not in
+        #IndianMasala
+c) FEATURE: You can now cancel a Manual DCC Send.
+d) BUG: File Size of downloading file is 0, when we restart computer after
+        a power failure. We now sync to disc for every 5MB of download.
+        Hence the max you would lose will be about 5 MB.
+e) FEATURE: Introduced Tray Icon. To make main window disappear, double click
+        on Tray Icon, or click on the icon next to Clock. Double click on
+        Tray icon to restore. Password = MasalaMate
+f) FEATURE: Trace FileNames now made to include the Version Date, so that
+        developer can easily recognise the trace file of lastest versions.
+g) FEATURE: Added /mode command. Will support most of the /mode commands
+        as in mirc. Can be issued only in Channel Window, and omit the
+        channel name in the /mode command. Example: /mode +l 300
+h) FEATURE: Added /topic command. Can be issued only in Channel Window.
+i) FEATURE: Added /blist command to list the ban list in channel.
+j) FEATURE: Attempt at Swarm Streaming. "@swarm <search>" to search for
+            file being swarmed. Friday Releases will be swarmed.
+k) BUG: File resumes in Linux wouldnt resume the correct file if it didnt
+        match case.
+l) FEATURE: The Tab key rotates through all matching nicks like mirc.
+m) FEATURE: Help->Demos, opens the Browser page where the Flash demos are.
+n) BUG: Was not correctly updating Q number when requesting from Iroffer
+        bots.
+o) FEATURE: Op Nicks appear in Red, Hops appear Orange.
+
+Next Beta release and Changes:
+==============================
+a) Lots of Swarm bug fixes.
+b) Tray password is settable by the user under Tools->Set Tray Password.
+   Default starts with no password.
+c) BUGFIX: Certain /join #channels were crashing client.
+d) Made the File Search TAB more complicated, with lots of options.
+e) Port to Mac OS X - needs X11 package to be installed.
+f) Can type color text mirc style - Ctrl-K04Red

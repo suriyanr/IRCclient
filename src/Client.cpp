@@ -1,0 +1,31 @@
+/*
+ Copyright (C) 2014 Suriyan Ramasami <suriyan.r@gmail.com>
+
+ This program is free software: you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation, either version 3 of the License, or
+ (at your option) any later version.
+
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
+
+ You should have received a copy of the GNU General Public License
+ along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
+#include "IRCClient.hpp"
+#include "StackTrace.hpp"
+#include "Compatibility.hpp"
+
+
+int main() {
+IRCClient Program;
+XChange XGlobal;
+
+   TRACE_INIT_CRASH("Client::Main Thread");
+   TRACE();
+   Program.run(&XGlobal);
+}
+
